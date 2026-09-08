@@ -3,25 +3,26 @@ import pandas as pd
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
-# Wczytuje zmienne środowiskowe z pliku .env (gdzie są dane logowania)
+# Load environment variables from .env file
 load_dotenv()
 
-# Pobiera konkretne parametry połączenia ze zmiennych środowiskowych
+# Fetch database connection parameters from environment variables
 DB_SERVER = os.getenv('DB_SERVER')
 DB_NAME = os.getenv('DB_NAME')
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 
-# tworzenie połączenia z bazą danych
+
 def get_db_engine():
+    """Create and return a SQLAlchemy database engine."""
     connection_string = (
         f"mssql+pymssql://{DB_USER}:{DB_PASSWORD}@{DB_SERVER}/{DB_NAME}"
     )
     return create_engine(connection_string)
 
 
-# wczytuje dane z bazy oraz zmienia nazwy kolumn na bardziej czytelne
 def load_train_data() -> pd.DataFrame:
+    """Load raw training data from MS SQL Server and alias column names."""
     engine = get_db_engine()
 
     query = """
@@ -50,6 +51,7 @@ def load_train_data() -> pd.DataFrame:
         FROM dbo.mobile_train
         """
     return pd.read_sql(query, engine)
+
 
 if __name__ == "__main__":
     df_train = load_train_data()
