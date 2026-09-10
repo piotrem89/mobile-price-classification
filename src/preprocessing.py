@@ -11,8 +11,18 @@ def replace_zeros_with_nan(df: pd.DataFrame) -> pd.DataFrame:
     return df_clean
 
 
-# Exploratory Data Analysis (EDA) and local verification of data anomalies.
+def impute_missing_values_median(df: pd.DataFrame, columns: list) -> pd.DataFrame:
+    """Impute missing values (NaN) in specified columns using their median."""
+    df_imputed = df.copy()
+    for col in columns:
+        median_value = df_imputed[col].median()
+        df_imputed[col] = df_imputed[col].fillna(median_value)
+    return df_imputed
+
+
+# Exploratory data analysis and local verification of data anomalies.
 if __name__ == "__main__":
+
     df_train = load_train_data()
 
     print("Initial NaN values count:")
@@ -23,8 +33,14 @@ if __name__ == "__main__":
     print("DataFrame Summary:")
     print(df_train.describe(include='all').T)
 
+# Check NaN values count after replacing invalid 0s with NaN
     raw_df = df_train
     clean_df = replace_zeros_with_nan(raw_df)
     print("*" * 100)
     print("NaN values count after cleaning:")
     print(clean_df.isna().sum())
+
+# Check if NaN values remain after median imputation
+    print("NaN values count after median imputation:")
+    imputed_df = impute_missing_values_median(clean_df,['screen_width_cm', 'screen_pixel_height'])
+    print(imputed_df.isna().sum())
