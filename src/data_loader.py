@@ -53,6 +53,39 @@ def load_train_data() -> pd.DataFrame:
     return pd.read_sql(query, engine)
 
 
+def load_test_data() -> pd.DataFrame:
+    """Load raw test data from MS SQL Server and alias column names."""
+    engine = get_db_engine()
+
+    query = """
+        SELECT 
+            battery_power AS battery_capacity_mah,
+            blue AS has_bluetooth,
+            clock_speed AS cpu_clock_speed_ghz,
+            dual_sim AS has_dual_sim,
+            fc AS front_camera_megapixels,
+            four_g AS has_4g,
+            int_memory AS internal_memory_gb,
+            m_dep AS phone_thickness_cm,
+            mobile_wt AS phone_weight_g,
+            n_cores AS cpu_cores_count,
+            pc AS primary_camera_megapixels,
+            px_height AS screen_pixel_height,
+            px_width AS screen_pixel_width,
+            ram AS ram_capacity_mb,
+            sc_h AS screen_height_cm,
+            sc_w AS screen_width_cm,
+            talk_time AS max_talk_time_hours,
+            three_g AS has_3g,
+            touch_screen AS has_touch_screen,
+            wifi AS has_wifi
+        FROM dbo.mobile_test
+        """
+    return pd.read_sql(query, engine)
+
+
 if __name__ == "__main__":
     df_train = load_train_data()
     print(df_train.head())
+    df_test = load_test_data()
+    print(df_test.head())
