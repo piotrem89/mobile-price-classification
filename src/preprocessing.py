@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+
 from src.data_loader import load_train_data
 
 
@@ -11,13 +12,21 @@ def replace_zeros_with_nan(df: pd.DataFrame) -> pd.DataFrame:
     return df_clean
 
 
-def impute_missing_values_median(df: pd.DataFrame, columns: list) -> pd.DataFrame:
-    """Impute missing values (NaN) in specified columns using their median."""
-    df_imputed = df.copy()
+def calculate_median_map(df: pd.DataFrame, columns: list) -> dict:
+    """ """
+    median_map = {}
     for col in columns:
-        median_value = df_imputed[col].median()
+        median_map[col] = df[col].median()
+    return median_map
+
+
+def impute_missing_values_with_map(df: pd.DataFrame, fill_map: dict) -> pd.DataFrame:
+    """Impute missing values in specified columns using a provided mapping dictionary(median)"""
+    df_imputed = df.copy()
+    for col, median_value in fill_map.items():
         df_imputed[col] = df_imputed[col].fillna(median_value)
     return df_imputed
+
 
 
 # Exploratory data analysis and local verification of data anomalies.
@@ -40,7 +49,12 @@ if __name__ == "__main__":
     print("NaN values count after cleaning:")
     print(clean_df.isna().sum())
 
-# Check if NaN values remain after median imputation
+# Calculate median map and impute missing values
+    target_cols = ['screen_width_cm', 'screen_pixel_height']
+    medians_map = calculate_median_map(clean_df, target_cols)
+    imputed_df = impute_missing_values_with_map(clean_df, medians_map)
+
+# Check NaN values count after median imputation for full DataFrame
+    print("*" * 100)
     print("NaN values count after median imputation:")
-    imputed_df = impute_missing_values_median(clean_df,['screen_width_cm', 'screen_pixel_height'])
     print(imputed_df.isna().sum())
