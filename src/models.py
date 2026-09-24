@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import HistGradientBoostingClassifier, BaggingClassifier, RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
-from sklearn.metrics import f1_score,accuracy_score, precision_score, recall_score, classification_report
+from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 
 def prepare_training_data(df: pd.DataFrame):
