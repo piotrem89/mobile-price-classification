@@ -1,6 +1,6 @@
 from src.data_loader import load_train_data, load_test_data
 from src.preprocessing import replace_zeros_with_nan, calculate_median_map, impute_missing_values_with_map
-from src.models import prepare_training_data, evaluate_models
+from src.models import prepare_training_data, evaluate_models, get_feature_importance
 from sklearn.metrics import classification_report
 
 if __name__ == '__main__':
@@ -37,3 +37,8 @@ if __name__ == '__main__':
     print(f"Validation Macro F1-Score: {best_f1:.4f}\n")
     print("Detailed Classification Report:")
     print(classification_report(y_val, best_y_pred))
+
+    # Calculate and display top feature importances
+    importances = get_feature_importance(best_clf, X_val, y_val)
+    print("\nTop 5 Most Important Features:")
+    print(importances.head(5))
