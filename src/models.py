@@ -3,6 +3,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import HistGradientBoostingClassifier, BaggingClassifier, RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
+from sklearn.inspection import permutation_importance
 
 def prepare_training_data(df: pd.DataFrame):
     """Separates the target column from features and performs a stratified train/validation split."""
@@ -40,3 +41,11 @@ def evaluate_models(X_tr, X_val, y_tr, y_val):
         if best[1] < f1:
             best = (name, f1, y_pred, clf)
     return best
+
+
+def get_feature_importance(best_clf, X_val, y_val):
+    """Calculates permutation feature importance for the best classifier on the validation set."""
+    result = permutation_importance(best_clf, X_val, y_val, n_repeats=10, random_state=0)
+    importances = pd.Series(result.importances_mean, index=X_val.columns)
+    return importances.sort_values(ascending=False)
+
