@@ -1,5 +1,7 @@
 from src.data_loader import load_train_data, load_test_data
 from src.preprocessing import replace_zeros_with_nan, calculate_median_map, impute_missing_values_with_map
+from src.models import prepare_training_data, evaluate_models
+from sklearn.metrics import classification_report
 
 if __name__ == '__main__':
     # Load raw datasets
@@ -23,3 +25,15 @@ if __name__ == '__main__':
 
     print("\nNaN count in test dataset after imputation:")
     print(imputed_test[['screen_width_cm', 'screen_pixel_height']].isna().sum())
+
+    # Prepare features and target with stratified split
+    X_tr, X_val, y_tr, y_val = prepare_training_data(imputed_train)
+
+    # Evaluate classifiers and find the best model
+    best_name, best_f1, best_y_pred, best_clf = evaluate_models(X_tr, X_val, y_tr, y_val)
+
+    # Display evaluation results
+    print(f"\nBest Classifier: {best_name}")
+    print(f"Validation Macro F1-Score: {best_f1:.4f}\n")
+    print("Detailed Classification Report:")
+    print(classification_report(y_val, best_y_pred))
