@@ -1,3 +1,18 @@
+# IDE settings
 .idea/
+
+# Environment variables
 .env
 !.env.example
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+venv/
+
+# Data and models
+data/
+models/
