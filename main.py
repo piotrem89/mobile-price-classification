@@ -3,6 +3,7 @@ from src.preprocessing import replace_zeros_with_nan, calculate_median_map, impu
 from src.models import prepare_training_data, evaluate_models, get_feature_importance
 from sklearn.metrics import classification_report
 import pandas as pd
+from src.visualization import merge_df, plot_test_predictions
 
 if __name__ == '__main__':
     # Load raw datasets
@@ -60,3 +61,9 @@ if __name__ == '__main__':
     print("Predictions successfully saved to data/test_predictions.csv")
 
     print(results.head())
+
+    # Merge test set features with predictions for reporting
+    prediction_summary_df = merge_df(imputed_test,results)
+
+    # Generate and save diagnostic plot to data directory
+    plot_test_predictions(prediction_summary_df)
