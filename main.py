@@ -2,6 +2,7 @@ from src.data_loader import load_train_data, load_test_data
 from src.preprocessing import replace_zeros_with_nan, calculate_median_map, impute_missing_values_with_map
 from src.models import prepare_training_data, evaluate_models, get_feature_importance
 from sklearn.metrics import classification_report
+import pandas as pd
 
 if __name__ == '__main__':
     # Load raw datasets
@@ -42,3 +43,20 @@ if __name__ == '__main__':
     importances = get_feature_importance(best_clf, X_val, y_val)
     print("\nTop 5 Most Important Features:")
     print(importances.head(5))
+
+    # Test prediction
+    print("\nGenerating predictions for test dataset")
+    test_id = imputed_test['phone_id']
+    X_test = imputed_test.drop(columns=['phone_id'])
+    test_predictions = best_clf.predict(X_test)
+
+    # Create DataFrame with results
+    results = pd.DataFrame({
+        'phone_id': test_id,
+        'predicted_price_range': test_predictions
+    })
+
+    results.to_csv('data/test_predictions.csv', index=False)
+    print("Predictions successfully saved to data/test_predictions.csv")
+
+    print(results.head())

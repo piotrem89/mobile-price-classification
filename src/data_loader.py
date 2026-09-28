@@ -59,6 +59,7 @@ def load_test_data() -> pd.DataFrame:
 
     query = """
         SELECT 
+            id AS phone_id,
             battery_power AS battery_capacity_mah,
             blue AS has_bluetooth,
             clock_speed AS cpu_clock_speed_ghz,
