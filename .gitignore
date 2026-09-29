@@ -14,5 +14,7 @@ __pycache__/
 venv/
 
 # Data and models
-data/
+data/*
+!data/train.csv
+!data/test.csv
 models/
