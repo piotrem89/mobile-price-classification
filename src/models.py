@@ -23,8 +23,8 @@ def evaluate_models(X_tr, X_val, y_tr, y_val):
         "RF" : RandomForestClassifier(max_depth= 5, class_weight= "balanced", random_state=0),
         "RF1000" : RandomForestClassifier(max_depth= 5, n_estimators = 1000, class_weight= "balanced", random_state=0),
         "Bagging" : BaggingClassifier(random_state=0),
-        "Boosting": AdaBoostClassifier(random_state=0),
-        "xGB" : GradientBoostingClassifier(random_state=0),
+        "AdaBoost": AdaBoostClassifier(random_state=0),
+        "Gradient Boosting" : GradientBoostingClassifier(random_state=0),
         "HGB_Classifier" : HistGradientBoostingClassifier(class_weight= "balanced", random_state=0)
     }
     # Stores: (best_name, best_f1, best_y_pred, best_clf_object)

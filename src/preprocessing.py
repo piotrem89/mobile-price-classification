@@ -13,7 +13,7 @@ def replace_zeros_with_nan(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def calculate_median_map(df: pd.DataFrame, columns: list) -> dict:
-    """ """
+    """ Calculates the median value for specified numerical columns in the dataset."""
     median_map = {}
     for col in columns:
         median_map[col] = df[col].median()
