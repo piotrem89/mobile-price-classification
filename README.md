@@ -47,16 +47,12 @@ Models were evaluated on a train/validation split using the **Macro F1-score** m
 
 | Model | Validation Macro F1-Score |
 | :--- | :---: |
-| **HistGradientBoosting** | **0.9141** |
-| **GradientBoosting** | 0.9025 |
-| **RandomForest** | 0.8812 |
-| **LogisticRegression** | 0.7230 |
+| **HGB_Classifier** | **0.9141** |
 
 ### Key Findings
-* **RAM Capacity is the Primary Driver:** Feature importance analysis reveals that RAM capacity accounts for over 60% of the model's predictive power when determining a phone's price category.
-* **Secondary Hardware Factors:** Battery capacity (`battery_power`) and screen resolution parameters (`px_width`, `px_height`) represent the next most significant pricing features.
-* **Non-Linear Relationships:** Ensemble tree-based methods (HistGradientBoosting) significantly outperformed linear models due to non-linear thresholds in hardware specs vs. price brackets.
-
+* **RAM is the main factor:** RAM capacity is by far the most important feature, driving over 60% of the model's predictions.
+* **Battery and screen resolution:** Battery capacity and screen size/resolution are the next most important hardware specs.
+* **Tree-based models win:** Models like `HGB_Classifier` easily outperform linear models because hardware pricing follows step-by-step thresholds rather than straight lines.
 ---
 
 ## Getting Started

@@ -19,13 +19,12 @@ def evaluate_models(X_tr, X_val, y_tr, y_val):
     """ Trains classifiers, evaluates them using macro F1-score,
         and returns the top model with its evaluation metrics."""
     clfs = {
-        "Tree": DecisionTreeClassifier(max_depth= 4, class_weight="balanced", random_state=0),
-        "RF" : RandomForestClassifier(max_depth= 5, class_weight= "balanced", random_state=0),
-        "RF1000" : RandomForestClassifier(max_depth= 5, n_estimators = 1000, class_weight= "balanced", random_state=0),
-        "Bagging" : BaggingClassifier(random_state=0),
+        "Tree": DecisionTreeClassifier(max_depth=5, random_state=0),
+        "RandomForest": RandomForestClassifier(n_estimators=100, max_depth=None, random_state=0),
+        "Bagging": BaggingClassifier(random_state=0),
         "AdaBoost": AdaBoostClassifier(random_state=0),
-        "Gradient Boosting" : GradientBoostingClassifier(random_state=0),
-        "HGB_Classifier" : HistGradientBoostingClassifier(class_weight= "balanced", random_state=0)
+        "GradientBoosting": GradientBoostingClassifier(random_state=0),
+        "HGB_Classifier": HistGradientBoostingClassifier(random_state=0)
     }
     # Stores: (best_name, best_f1, best_y_pred, best_clf_object)
     best = (None,0,None, None)
