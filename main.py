@@ -32,9 +32,13 @@ if __name__ == '__main__':
     X_tr, X_val, y_tr, y_val = prepare_training_data(imputed_train)
 
     # Evaluate classifiers and find the best model
-    best_name, best_f1, best_y_pred, best_clf = evaluate_models(X_tr, X_val, y_tr, y_val)
+    (best_name, best_f1, best_y_pred, best_clf), results_df = evaluate_models(X_tr, X_val, y_tr, y_val)
 
     # Display evaluation results
+    print("\n--- Model Evaluation Results ---")
+    print(results_df.to_string(index=False))
+    print("--------------------------------\n")
+
     print(f"\nBest Classifier: {best_name}")
     print(f"Validation Macro F1-Score: {best_f1:.4f}\n")
     print("Detailed Classification Report:")

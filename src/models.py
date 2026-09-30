@@ -17,7 +17,7 @@ def prepare_training_data(df: pd.DataFrame):
 
 def evaluate_models(X_tr, X_val, y_tr, y_val):
     """ Trains classifiers, evaluates them using macro F1-score,
-        and returns the top model with its evaluation metrics."""
+        prints a summary table, and returns the top model with its evaluation metrics."""
     clfs = {
         "Tree": DecisionTreeClassifier(max_depth=5, random_state=0),
         "RandomForest": RandomForestClassifier(n_estimators=100, max_depth=None, random_state=0),
@@ -27,6 +27,7 @@ def evaluate_models(X_tr, X_val, y_tr, y_val):
         "HGB_Classifier": HistGradientBoostingClassifier(random_state=0)
     }
     # Stores: (best_name, best_f1, best_y_pred, best_clf_object)
+    results = []
     best = (None,0,None, None)
     for name, clf in clfs.items():
         # Train model and predict on validation set
@@ -35,11 +36,13 @@ def evaluate_models(X_tr, X_val, y_tr, y_val):
 
         # Calculate macro F1-score
         f1 = f1_score(y_val, y_pred, average='macro')
-
+        results.append({"Model": name, "Macro_F1": round(f1, 4)})
         # Track the best performing model
         if best[1] < f1:
             best = (name, f1, y_pred, clf)
-    return best
+    results_df = pd.DataFrame(results).sort_values(by="Macro_F1", ascending=False)
+
+    return best, results_df
 
 
 def get_feature_importance(best_clf, X_val, y_val):

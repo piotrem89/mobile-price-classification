@@ -48,6 +48,11 @@ Models were evaluated on a train/validation split using the **Macro F1-score** m
 | Model | Validation Macro F1-Score |
 | :--- | :---: |
 | **HGB_Classifier** | **0.9141** |
+| **GradientBoosting** | 0.8926 |
+| **RandomForest** | 0.8840 |
+| **Bagging** | 0.8636 |
+| **Tree** | 0.7968 |
+| **AdaBoost** | 0.4654 |
 
 ### Key Findings
 * **RAM is the main factor:** RAM capacity is by far the most important feature, driving over 60% of the model's predictions.
