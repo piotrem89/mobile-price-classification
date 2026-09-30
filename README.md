@@ -13,8 +13,8 @@ The dataset used in this project originates from the Kaggle competition:
 ## Data Pipeline & Architecture
 
 * **Data Ingestion:** Loads dataset from a local MS SQL Server instance. If database connection is unavailable, it automatically falls back to local CSV files in the `data/` directory, allowing code execution without local DB setup.
-* **Preprocessing:** Handles missing values via median imputation.
-* **Modelling:** Trains a classification model and evaluates feature importance.
+* **Preprocessing:** Zeros in `screen_width_cm` and `screen_pixel_height` are treated as missing values (a screen cannot have zero width or height) and replaced with the median calculated on the training set only, to avoid data leakage.
+* **Modelling:** Compares 6 classifiers (Decision Tree, Random Forest, Bagging, AdaBoost, Gradient Boosting, HistGradientBoosting) on a stratified train/validation split, selects the best one by Macro F1-score and calculates permutation feature importance.
 * **Outputs:** Automatically exports predictions to CSV and generates a summary plot.
 
 ---
@@ -43,21 +43,24 @@ mobile-price-classification/
 
 ## Results & Evaluation
 
-Models were evaluated on a train/validation split using the **Macro F1-score** metric to ensure unbiased performance assessment across all 4 balanced price classes.
+Six classifiers were compared on a single stratified train/validation split (70/30) using **Macro F1-score**. The dataset has 4 balanced price classes (150 validation samples each).
 
 | Model | Validation Macro F1-Score |
 | :--- | :---: |
 | **HGB_Classifier** | **0.9141** |
-| **GradientBoosting** | 0.8926 |
-| **RandomForest** | 0.8840 |
-| **Bagging** | 0.8636 |
-| **Tree** | 0.7968 |
-| **AdaBoost** | 0.4654 |
+| GradientBoosting | 0.8926 |
+| RandomForest | 0.8840 |
+| Bagging | 0.8636 |
+| Tree | 0.7968 |
+| AdaBoost | 0.4654 |
+
+**Limitation:** the best model was selected on the same validation set on which its score is reported, so the result may be slightly optimistic. A next step would be cross-validation.
 
 ### Key Findings
-* **RAM is the main factor:** RAM capacity is by far the most important feature, driving over 60% of the model's predictions.
-* **Battery and screen resolution:** Battery capacity and screen size/resolution are the next most important hardware specs.
-* **Tree-based models win:** Models like `HGB_Classifier` easily outperform linear models because hardware pricing follows step-by-step thresholds rather than straight lines.
+* **RAM is by far the most important feature.** Permutation importance (mean drop in accuracy after shuffling a feature on the validation set): `ram_capacity_mb` 0.645, `battery_capacity_mah` 0.178, `screen_pixel_width` 0.072, `screen_pixel_height` 0.064, `screen_height_cm` 0.011.
+* **Extreme classes are easier to predict.** For the best model, classes 0 and 3 have F1 of 0.96 and 0.94, while the middle classes 1 and 2 have 0.89 and 0.87.
+* **Boosting and ensemble tree models scored highest** (`HGB_Classifier`, `GradientBoosting`, `RandomForest`). AdaBoost with default settings scored much lower (0.4654); I did not investigate why.
+* No linear models or hyperparameter tuning were included in this comparison.
 ---
 
 ## Getting Started
@@ -67,7 +70,7 @@ Models were evaluated on a train/validation split using the **Macro F1-score** m
 Clone the repository and set up a virtual environment:
 
 ```bash
-git clone https://github.com/Piotrem89/Mobile-price-classification.git
+git clone https://github.com/Piotrem89/mobile-price-classification.git
 cd Mobile-price-classification
 python -m venv .venv
 ```

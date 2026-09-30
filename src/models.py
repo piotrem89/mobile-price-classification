@@ -17,10 +17,10 @@ def prepare_training_data(df: pd.DataFrame):
 
 def evaluate_models(X_tr, X_val, y_tr, y_val):
     """ Trains classifiers, evaluates them using macro F1-score,
-        prints a summary table, and returns the top model with its evaluation metrics."""
+        returns a summary table, and the top model with its evaluation metrics."""
     clfs = {
         "Tree": DecisionTreeClassifier(max_depth=5, random_state=0),
-        "RandomForest": RandomForestClassifier(n_estimators=100, max_depth=None, random_state=0),
+        "RandomForest": RandomForestClassifier(n_estimators=100, random_state=0),
         "Bagging": BaggingClassifier(random_state=0),
         "AdaBoost": AdaBoostClassifier(random_state=0),
         "GradientBoosting": GradientBoostingClassifier(random_state=0),
