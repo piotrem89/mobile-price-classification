@@ -2,6 +2,12 @@
 
 Predictive pipeline classifying mobile phones into 4 price tiers based on hardware specifications (RAM, battery power, screen resolution, etc.).
 
+
+## Data Source
+
+The dataset used in this project originates from the Kaggle competition:
+[Mobile Price Classification](https://www.kaggle.com/datasets/iabhisheksingh/mobile-price-classification).
+
 ---
 
 ## Data Pipeline & Architecture
@@ -34,6 +40,22 @@ mobile-price-classification/
 ├── requirements.txt
 └── README.md
 ```
+
+## Results & Evaluation
+
+Models were evaluated on a train/validation split using the **Macro F1-score** metric to ensure unbiased performance assessment across all 4 balanced price classes.
+
+| Model | Validation Macro F1-Score |
+| :--- | :---: |
+| **HistGradientBoosting** | **0.9141** |
+| **GradientBoosting** | 0.9025 |
+| **RandomForest** | 0.8812 |
+| **LogisticRegression** | 0.7230 |
+
+### Key Findings
+* **RAM Capacity is the Primary Driver:** Feature importance analysis reveals that RAM capacity accounts for over 60% of the model's predictive power when determining a phone's price category.
+* **Secondary Hardware Factors:** Battery capacity (`battery_power`) and screen resolution parameters (`px_width`, `px_height`) represent the next most significant pricing features.
+* **Non-Linear Relationships:** Ensemble tree-based methods (HistGradientBoosting) significantly outperformed linear models due to non-linear thresholds in hardware specs vs. price brackets.
 
 ---
 
@@ -75,7 +97,7 @@ python main.py
 Upon completion, the pipeline outputs two files to the `data/` directory:
 
 * `test_predictions.csv` – Predicted price categories for test records.
-* `test_predictions_plot.png` – Visual summary of predicted class distribution and key feature importances.
+* `test_predictions_plot.png` – Visual summary of the predicted price class distribution and their relationship with RAM capacity.
 
 > **Note:** By default, the script attempts to load data from the MS SQL Server database. If the database connection is unavailable, it automatically falls back to reading local CSV files from the `data/` directory.
 
